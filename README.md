@@ -8,17 +8,14 @@ $ python duplicates.py <путь к папке>
 
 Пример использования:
 ```
-python .\duplicates.py C:\test\
+python duplicates.py C:\Test
 
-Путь C:\test\
 
-Найдены следующие дубликаты в папке C:\test\:
+Найдены следующие дубликаты в папке C:\Test:
 
-C:\test\Test1\Test.txt и C:\test\Test2\Test.txt
+C:\Test\test1.txt, C:\Test\Test2\test1.txt, C:\Test\Test3\test1.txt
 
-C:\test\Test1\Test.txt и C:\test\Test3\Test.txt
-
-C:\test\Test2\Test.txt и C:\test\Test3\Test.txt
+C:\Test\test2.txt, C:\Test\Test1\test2.txt, C:\Test\Test1\Test1_2\test2.txt, C:\Test\Test2\test2.txt
 
 
 Программа завершена

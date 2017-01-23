@@ -24,20 +24,25 @@ def are_files_equal(file1, file2):
 
 
 def is_not_duplicates_in_list(file1, file2, duplicates_files):
-    if [file1, file2] not in duplicates_files and \
-       [file2, file1] not in duplicates_files:
-        return True
+    if duplicates_files:
+        for duplicates_for_file in duplicates_files:
+            if file1 in duplicates_for_file and file2 in duplicates_for_file:
+                return None
+    return True
 
 
 def get_duplicates_files(files_list):
     duplicates_files = []
     for file_path_1 in files_list:
+        duplicates_for_file = []
         for file_path_2 in files_list:
-            checked_duplicates = are_files_equal(file_path_1, file_path_2)
-            if checked_duplicates and \
-                    is_not_duplicates_in_list(file_path_1,
-                                              file_path_2, duplicates_files):
-                duplicates_files.append([file_path_1, file_path_2])
+            if is_not_duplicates_in_list(file_path_1,
+                                         file_path_2, duplicates_files):
+                if are_files_equal(file_path_1, file_path_2):
+                    duplicates_for_file.append(file_path_2)
+        if duplicates_for_file:
+            duplicates_for_file.insert(0, file_path_1)
+            duplicates_files.append(duplicates_for_file)
     return duplicates_files
 
 
@@ -45,9 +50,9 @@ def print_duplicates_files(duplicates_files, path):
     if not duplicates_files:
         print("\nДубликатов в папке {} не найдено:".format(path))
         return None
-    print("\nНайдены следующие дубликаты в папке {}:".format(path))
+    print("\nНайдены следующие дубликаты в папке {}:\n".format(path))
     for duplicates in duplicates_files:
-        print('{} и {}'.format(duplicates[0], duplicates[1]))
+        print(", ".join(file_name for file_name in duplicates))
 
 
 if __name__ == '__main__':
@@ -56,7 +61,6 @@ if __name__ == '__main__':
         if not os.path.isdir(path_name):
             print('{} путь неверен'.format(path_name))
             continue
-        print('Путь {}'.format(path_name))
         files = get_files_in_path(path_name)
         print_duplicates_files(get_duplicates_files(files), path_name)
     print("\nПрограмма завершена")
