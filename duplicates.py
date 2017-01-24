@@ -19,8 +19,10 @@ def get_files_in_path(path_name):
 
 
 def are_files_equal(file1, file2):
-    if file1 != file2 and cmp(file1, file2):
-        return True
+    if os.path.basename(file1) == os.path.basename(file1) \
+            and file1 != file2:
+        if cmp(file1, file2):
+            return True
 
 
 def is_not_duplicates_in_list(file1, file2, duplicates_files):
