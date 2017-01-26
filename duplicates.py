@@ -22,17 +22,16 @@ def get_duplicates_files(files_list):
     duplicates_files = {}
     for file_path_1 in files_list:
         duplicates_for_file = []
+        file_name_1 = os.path.basename(file_path_1)
         for file_path_2 in files_list:
-            if os.path.basename(file_path_1) != os.path.basename(file_path_2)\
-                    and file_path_1 == file_path_2:
-                continue
-            if file_path_1 and file_path_2 in duplicates_files:
+            file_name_2 = os.path.basename(file_path_2)
+            if (file_path_1, file_path_2) in duplicates_files \
+                    or file_name_1 != file_name_2:
                 continue
             if cmp(file_path_1, file_path_2):
                 duplicates_for_file.append(os.path.dirname(file_path_2))
-        if duplicates_for_file:
-            duplicates_files[os.path.basename(
-                file_path_1)] = duplicates_for_file
+        if len(duplicates_for_file) > 1:
+            duplicates_files[file_name_1] = duplicates_for_file
     return duplicates_files
 
 
@@ -49,9 +48,6 @@ def print_duplicates_files(duplicates_files, path):
 if __name__ == '__main__':
     path_names = read_path_from_args()
     for path_name in path_names:
-        if not os.path.isdir(path_name):
-            print('{} путь неверен'.format(path_name))
-            continue
         files = get_files_in_path(path_name)
         print_duplicates_files(get_duplicates_files(files), path_name)
     print("\nПрограмма завершена")
