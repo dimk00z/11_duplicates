@@ -18,33 +18,21 @@ def get_files_in_path(path_name):
     return files_list
 
 
-def are_files_equal(file1, file2):
-    if os.path.basename(file1) == os.path.basename(file1) \
-            and file1 != file2:
-        if cmp(file1, file2):
-            return True
-
-
-def is_not_duplicates_in_list(file1, file2, duplicates_files):
-    if duplicates_files:
-        for duplicates_for_file in duplicates_files:
-            if file1 in duplicates_for_file and file2 in duplicates_for_file:
-                return None
-    return True
-
-
 def get_duplicates_files(files_list):
-    duplicates_files = []
+    duplicates_files = {}
     for file_path_1 in files_list:
+        file_name = os.path.basename(file_path_1)
         duplicates_for_file = []
         for file_path_2 in files_list:
-            if is_not_duplicates_in_list(file_path_1,
-                                         file_path_2, duplicates_files):
-                if are_files_equal(file_path_1, file_path_2):
-                    duplicates_for_file.append(file_path_2)
-        if duplicates_for_file:
-            duplicates_for_file.insert(0, file_path_1)
-            duplicates_files.append(duplicates_for_file)
+            if os.path.basename(file_path_1) != os.path.basename(file_path_2)\
+                    and file_path_1 == file_path_2:
+                continue
+            if file_path_1 and file_path_2 in duplicates_files:
+                continue
+            if cmp(file_path_1, file_path_2):
+                duplicates_for_file.append(os.path.dirname(file_path_2))
+            duplicates_files[os.path.basename(
+                file_path_1)] = duplicates_for_file
     return duplicates_files
 
 
@@ -53,8 +41,9 @@ def print_duplicates_files(duplicates_files, path):
         print("\nДубликатов в папке {} не найдено:".format(path))
         return None
     print("\nНайдены следующие дубликаты в папке {}:\n".format(path))
-    for duplicates in duplicates_files:
-        print(", ".join(file_name for file_name in duplicates))
+    for key, pathes in duplicates_files.items():
+        print("\nФайл '{}' наден в следующих папках:".format(key))
+        print(", ".join(path_name for path_name in pathes))
 
 
 if __name__ == '__main__':

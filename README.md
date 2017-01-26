@@ -11,15 +11,16 @@ $ python duplicates.py <путь к папке>
 python duplicates.py C:\Test
 
 
-Найдены следующие дубликаты в папке C:\Test:
+Найдены следующие дубликаты в папке C:\Test\:
 
-C:\Test\test1.txt, C:\Test\Test2\test1.txt, C:\Test\Test3\test1.txt
 
-C:\Test\test2.txt, C:\Test\Test1\test2.txt, C:\Test\Test1\Test1_2\test2.txt, C:\Test\Test2\test2.txt
+Файл 'test1.txt' наден в следующих папках:
+C:\Test, C:\Test\Test2, C:\Test\Test3
 
+Файл 'test2.txt' наден в следующих папках:
+C:\Test, C:\Test\Test1, C:\Test\Test1\Test1_2, C:\Test\Test2
 
 Программа завершена
-
 
 ```
 
