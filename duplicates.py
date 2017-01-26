@@ -18,6 +18,11 @@ def get_files_in_path(path_name):
     return files_list
 
 
+def add_path_to_duplicates(path, duplicate):
+    if os.path.dirname(path) not in duplicate:
+        duplicate.append(os.path.dirname(path))
+
+
 def get_duplicates_files(files_list):
     duplicates_files = {}
     for file_path_1 in files_list:
@@ -25,12 +30,14 @@ def get_duplicates_files(files_list):
         file_name_1 = os.path.basename(file_path_1)
         for file_path_2 in files_list:
             file_name_2 = os.path.basename(file_path_2)
-            if (file_path_1, file_path_2) in duplicates_files \
-                    or file_name_1 != file_name_2:
+            if file_path_1 == file_path_2 or file_name_1 != file_name_2:
+                continue
+            if (file_path_1, file_path_2) in duplicates_files:
                 continue
             if cmp(file_path_1, file_path_2):
-                duplicates_for_file.append(os.path.dirname(file_path_2))
-        if len(duplicates_for_file) > 1:
+                add_path_to_duplicates(file_path_1, duplicates_for_file)
+                add_path_to_duplicates(file_path_2, duplicates_for_file)
+        if duplicates_for_file:
             duplicates_files[file_name_1] = duplicates_for_file
     return duplicates_files
 
