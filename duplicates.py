@@ -21,7 +21,6 @@ def get_files_in_path(path_name):
 def get_duplicates_files(files_list):
     duplicates_files = {}
     for file_path_1 in files_list:
-        file_name = os.path.basename(file_path_1)
         duplicates_for_file = []
         for file_path_2 in files_list:
             if os.path.basename(file_path_1) != os.path.basename(file_path_2)\
@@ -31,6 +30,7 @@ def get_duplicates_files(files_list):
                 continue
             if cmp(file_path_1, file_path_2):
                 duplicates_for_file.append(os.path.dirname(file_path_2))
+        if duplicates_for_file:
             duplicates_files[os.path.basename(
                 file_path_1)] = duplicates_for_file
     return duplicates_files
