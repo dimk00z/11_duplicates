@@ -22,7 +22,7 @@ def get_files_in_path(path_name):
     return files_dict
 
 
-def remove_from_dict_single_file(files_dict):
+def remove_from_dict_single_files(files_dict):
     keys_for_remove = []
     for key in files_dict:
         if len(files_dict[key]) == 1:
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     path_names = read_path_from_args()
     for path_name in path_names:
         files = get_files_in_path(path_name)
-        files = remove_from_dict_single_file(files)
+        files = remove_from_dict_single_files(files)
         duplicates = get_duplicates_files(files)
         print_duplicates_files(duplicates, path_name)
     print("\nПрограмма завершена")
