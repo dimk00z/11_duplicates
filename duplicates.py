@@ -27,15 +27,15 @@ def get_duplicates_files_dict(files_dict):
     return duplicates_dict
 
 
-def get_duplicates_files(files_dict):
-    duplicates_files = defaultdict(list)
-    for file_name in files_dict:
-        for path1, path2 in combinations(files_dict[file_name], 2):
+def get_duplicates_files(duplicates_dict):
+    duplicates = defaultdict(list)
+    for file_name, paths_for_file in duplicates_dict.items():
+        for path1, path2 in combinations(paths_for_file, 2):
             if cmp(path1, path2):
-                duplicates_files[file_name] += [os.path.dirname(path1),
-                                                os.path.dirname(path2)]
-        duplicates_files[file_name] = set(duplicates_files[file_name])
-    return duplicates_files
+                duplicates[file_name] += [os.path.dirname(path1),
+                                          os.path.dirname(path2)]
+        duplicates[file_name] = set(duplicates[file_name])
+    return duplicates
 
 
 def print_duplicates_files(duplicates_files, path):
