@@ -51,8 +51,8 @@ def print_duplicates_files(duplicates_files, path):
 if __name__ == '__main__':
     path_names = read_path_from_args()
     for path_name in path_names:
-        files = get_files_in_path(path_name)
-        files = get_duplicates_files_dict(files)
-        duplicates = get_duplicates_files(files)
-        print_duplicates_files(duplicates, path_name)
+        files_dict = get_files_in_path(path_name)
+        duplicates_files_dict = get_duplicates_files_dict(files_dict)
+        real_duplicates = get_duplicates_files(duplicates_files_dict)
+        print_duplicates_files(real_duplicates, path_name)
     print("\nПрограмма завершена")
