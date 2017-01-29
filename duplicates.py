@@ -1,6 +1,8 @@
 import argparse
 import os
 from filecmp import cmp
+from collections import defaultdict
+from itertools import combinations
 
 
 def read_path_from_args():
@@ -11,45 +13,28 @@ def read_path_from_args():
 
 
 def get_files_in_path(path_name):
-    files_dict = {}
+    files_dict = defaultdict(list)
     for top, dirs, files in os.walk(path_name):
         for name in files:
-            if name in files_dict.keys():
-                files_dict[name].append(os.path.join(top, name))
-            else:
-                files_dict[name] = []
-                files_dict[name].append(os.path.join(top, name))
+            files_dict[name].append(os.path.join(top, name))
     return files_dict
 
 
-def remove_from_dict_single_files(files_dict):
-    keys_for_remove = []
-    for key in files_dict:
-        if len(files_dict[key]) == 1:
-            keys_for_remove.append(key)
-    for key in keys_for_remove:
-        files_dict.pop(key)
-    return files_dict
-
-
-def add_path_to_duplicates(paths, duplicate):
-    for path in paths:
-        if os.path.dirname(path) not in duplicate:
-            duplicate.append(os.path.dirname(path))
+def get_duplicates_files_dict(files_dict):
+    duplicates_dict = {file: files_dict[file]
+                       for file in files_dict
+                       if len(files_dict[file]) != 1}
+    return duplicates_dict
 
 
 def get_duplicates_files(files_dict):
-    duplicates_files = {}
+    duplicates_files = defaultdict(list)
     for file_name in files_dict:
-        for path1 in files_dict[file_name]:
-            duplicates_for_file = []
-            for path2 in files_dict[file_name]:
-                if path1 == path2:
-                    continue
-                if cmp(path1, path2):
-                    add_path_to_duplicates([path1, path2], duplicates_for_file)
-            if duplicates_for_file:
-                duplicates_files[file_name] = duplicates_for_file
+        for path1, path2 in combinations(files_dict[file_name], 2):
+            if cmp(path1, path2):
+                duplicates_files[file_name] += [os.path.dirname(path1),
+                                                os.path.dirname(path2)]
+        duplicates_files[file_name] = set(duplicates_files[file_name])
     return duplicates_files
 
 
@@ -67,7 +52,7 @@ if __name__ == '__main__':
     path_names = read_path_from_args()
     for path_name in path_names:
         files = get_files_in_path(path_name)
-        files = remove_from_dict_single_files(files)
+        files = get_duplicates_files_dict(files)
         duplicates = get_duplicates_files(files)
         print_duplicates_files(duplicates, path_name)
     print("\nПрограмма завершена")
