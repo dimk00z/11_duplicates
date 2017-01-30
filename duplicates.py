@@ -21,10 +21,9 @@ def get_files_in_path(path_name):
 
 
 def get_duplicates_files_dict(files_dict):
-    duplicates_dict = {file: files_dict[file]
-                       for file in files_dict
-                       if len(files_dict[file]) != 1}
-    return duplicates_dict
+    return {file: duplicates
+            for file, duplicates in files_dict.items()
+            if len(duplicates) > 1}
 
 
 def get_duplicates_files(duplicates_dict):
